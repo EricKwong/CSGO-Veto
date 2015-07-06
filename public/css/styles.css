@@ -1,0 +1,89 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic);
+
+html, body {
+  margin: 0;
+  font-size: 100%;
+  color: white;
+  text-shadow: 0 0.2em 0.8em rgba(0,0,0,0.5);
+  font-family: "Lato";
+}
+
+body {
+  background-image: url('http://countertactic.com/wp-content/uploads/2012/09/csgo-2012-09-01-11-28-34-45.jpg');
+  background-repeat: no-repeat;
+  background-size: stretch;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.map:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.banned {
+  color: red;
+}
+.picked {
+  color: lime;
+}
+
+#teams div {
+  display: inline-block;
+  margin: 1em;
+}
+
+#teams h1 {
+  text-align: center;
+  margin: 0;
+}
+
+#teams input {
+  width: 6em;
+  height: 0.8em;
+  font-size: 1.8em;
+  text-align: center;
+  outline: none;
+  padding: 0.2em;
+}
+
+.team-2-container {
+  float: right;
+}
+
+#game-select {
+  margin-top: 5%;
+  text-align: center;
+  font-size: 3em;
+}
+
+#game-select p {
+  margin: 0;
+}
+
+#game-select select, #game-select button {
+  font-size: 0.5em;
+  border-radius: 0.4em;
+  cursor: pointer;
+  border: 0;
+  outline: none;
+  box-shadow: 0 0.2em 0.8em rgba(0,0,0,0.5);
+}
+
+#game-select select {
+  background-color: indianred;
+  color: white;
+  margin-right: 0.2em;
+}
+
+#game-select button {
+  background-color: white;
+  color: indianred;
+}
+
+#game-select button:active {
+  background-color: indianred;
+  color: white;
+}
