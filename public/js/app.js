@@ -41,6 +41,23 @@ var TextInput = React.createClass({
   }
 });
 
+var Map = React.createClass({
+  render: function() {
+    return (
+      <div className="map" style={this.generateStyle(this.props.map)}>
+        <p className="map-name">{this.props.map}</p>
+      </div>
+    )
+  },
+
+  generateStyle: function(map) {
+    return {
+      backgroundImage: "url(../images/" + map + ".jpg)",
+      backgroundPosition: "center"
+    }
+  }
+});
+
 var MapList = React.createClass({
   getInitialState: function() {
     return {
@@ -52,28 +69,28 @@ var MapList = React.createClass({
   render: function() {
     return (
       <div>
+        <p className="status">{this.statusChange()}</p>
         <div className="maplist">
-          <div className="map">de_dust2</div>
-          <div className="map">de_inferno</div>
-          <div className="map">de_mirage</div>
-          <div className="map">de_cache</div>
-          <div className="map">de_train</div>
-          <div className="map">de_ovepass</div>
-          <div className="map">de_cbble</div>
+          {this.maps.map(function(map) {
+            return <Map map={map}/>;
+          })}
         </div>
-        <p>{this.statusChange()}</p>
       </div>
     );
   },
 
+  maps: ["de_dust2", "de_inferno", "de_mirage", "de_cache", "de_train", "de_overpass", "de_cbble"],
+
   componentDidMount: function() {
     $(".map").on("click", this.selected);
+    $(".map-name").on("click", this.selected);
   },
 
   componentWillUnMount: function() {
     $(".map").off("click", this.selected);
     $(".banned").off("click", this.selected);
     $(".picked").off("click", this.selected);
+    $(".map-name").off("click", this.selected);
   },
 
   selected: function(element) {
