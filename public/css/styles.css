@@ -30,25 +30,30 @@ div {
   margin: 0.5em 0;
 }
 
+.start-details {
+  font-size: 0.3em;
+}
+
 .maplist {
   width: 25em;
-  height: 5em;
+  height: 5.2em;
   margin: 0 auto;
 }
 
 .map, .banned, .picked {
   width: 100%;
   height: 100%;
-  padding: 3em 0 0 0.5em;
+  padding: 0.4em 0 0 0.4em;
   background-color: rgba(0,0,0,0.4);
   margin: 0.8em auto;
   background-size: cover;
-  color: rgba(255,255,255,0.7);
-  box-shadow: 0 0.2 0.2em rgb(255,255,255);
+  color: rgba(255,255,255,0.5);
+  box-shadow: 0em 0em 3em rgba(255,255,255,0.3);
 }
 
 .map:hover {
   color: rgba(255,255,255,1);
+  box-shadow: 0em 0em 3em rgba(255,255,255,0.8);
   cursor: pointer;
 }
 
@@ -58,10 +63,20 @@ div {
 }
 
 .banned {
-  color: red;
+  box-shadow: 0em 0em 1em rgba(255,0,0,0.7);
 }
 .picked {
+  box-shadow: 0em 0em 1em rgba(0,255,0,0.7);
+}
+
+.team-ban {
+  color: red;
+  opacity: 0.9;
+}
+
+.team-pick {
   color: lime;
+  opacity: 0.9;
 }
 
 #teams div {

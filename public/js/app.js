@@ -62,7 +62,9 @@ var MapList = React.createClass({
   getInitialState: function() {
     return {
       ban: true,
-      turn: 1
+      turn: 1,
+      status: null,
+      teamName: null
     };
   },
 
@@ -83,14 +85,23 @@ var MapList = React.createClass({
 
   componentDidMount: function() {
     $(".map").on("click", this.selected);
-    $(".map-name").on("click", this.selected);
+    $(".map-name").on("click", this.selectedName);
   },
 
   componentWillUnMount: function() {
     $(".map").off("click", this.selected);
     $(".banned").off("click", this.selected);
     $(".picked").off("click", this.selected);
-    $(".map-name").off("click", this.selected);
+    $(".map-name").off("click", this.selectedName);
+  },
+
+  selectedName: function(element) {
+    var parentMap = $(element.target).parent()[0];
+    if (this.props.mapType === "bo3") {
+      this.bestOfThree(parentMap);
+    } else {
+      this.bestOfOne(parentMap);
+    }
   },
 
   selected: function(element) {
@@ -106,14 +117,19 @@ var MapList = React.createClass({
     if (map.className === "map") {
       if (this.state.ban) {
         map.className = "banned";
+        $(map).append("<p class='team-ban'>" + this.state.turn + ". " + this.state.teamName + "</p>");
       } else {
-        map.className = "picked";
+        if (this.state.turn === 3) {
+          map.className = "first picked";
+        } else if (this.state.turn === 4) {
+          map.className = "second picked";
+        }
+        $(map).append("<p class='team-pick'>" + this.state.turn + ". " + this.state.teamName + "</p>");
       }
       this.state.turn = this.state.turn + 1;
-      console.log(this.state.ban, this.state.turn);
       if (this.state.turn % 2 != 0) {
         if (this.state.turn === 7) {
-          $(".map").attr("class", "picked");
+          $(".map").attr("class", "last picked");
         }
         this.setState({ban: !this.state.ban});
       } else {
@@ -125,6 +141,7 @@ var MapList = React.createClass({
   bestOfOne: function(map) {
     if (map.className === "map") {
       map.className = "banned";
+      $(map).append("<p class='team-ban'>" + this.state.turn + ". " + this.state.teamName + "</p>");
       this.state.turn = this.state.turn + 1;
       if (this.state.turn === 7) {
           $(".map").attr("class", "picked");
@@ -134,34 +151,37 @@ var MapList = React.createClass({
   },
 
   statusChange: function() {
-    var status,
-        teamName;
-
     if (this.state.turn === 7) {
-      var pickedMapElements = $(".picked");
-      var pickedMaps = [];
-      pickedMapElements.each(function(idx) {
-        pickedMaps.push(pickedMapElements[idx].innerText);
-      });
+      // var pickedMapElements = $(".picked");
+      // var pickedMaps = [];
+      // pickedMapElements.each(function(idx) {
+      //   var pickedMap = $(pickedMapElements[idx]).children(".map-name")[0].innerText;
+      //   pickedMaps.push(pickedMap);
+      // });
       if (this.props.mapType === "bo3") {
-        return "Maps are " + pickedMaps.join(" ");
+        var firstMap = $(".first.picked")[0].children[0].innerText;
+        var secondMap = $(".second.picked")[0].children[0].innerText;
+        var lastMap = $(".last.picked")[0].children[0].innerText;
+        var maps = [firstMap, secondMap, lastMap];
+        return "Maps are " + maps.join(", ");
       } else {
-        return "Map is " + pickedMaps;
+        var pickedMap = $(".picked")[0].children[0].innerText;
+        return "Map is " + pickedMap;
       }
     } else {
       if (this.state.turn % 2 != 0) {
-        teamName = this.props.teamOne; 
+        this.state.teamName = this.props.teamOne; 
       } else {
-        teamName = this.props.teamTwo;
+        this.state.teamName = this.props.teamTwo;
       }
 
       if (this.state.ban) {
-        status = "ban";
+        this.state.status = "ban";
       } else {
-        status = "pick";
+        this.state.status = "pick";
       }
 
-      return teamName + "'s turn to " + status;
+      return this.state.teamName + "'s turn to " + this.state.status;
     }
 
   }
@@ -184,9 +204,10 @@ var MapSelect = React.createClass({
         <TextInput/>
         <div id="game-select">
           <p>Please Select Type of Game</p>
+          <p className="start-details">(Team 1 bans first)</p>
           <select>
-            <option value="bo1">B01</option>
-            <option value="bo3">B03</option>
+            <option value="bo1">BO1</option>
+            <option value="bo3">BO3</option>
           </select>
           <button onClick={this.submitType}>Submit</button>
         </div>
