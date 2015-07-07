@@ -3,41 +3,14 @@ var TextInput = React.createClass({
     return (
       <div id="teams">
         <div className="team-1-container">
-          <h1 id="team-1">TEAM 1</h1>
-          <input id="team-1-edit" maxLength="10"/>
+          <input id="team-1-edit" placeholder="Team 1" maxLength="10"/>
         </div>
+        <p id="vs">VS</p>
         <div className="team-2-container">
-          <h1 id="team-2">TEAM 2</h1>
-          <input id="team-2-edit" maxLength="10"/>
+          <input id="team-2-edit" placeholder="Team 2" maxLength="10"/>
         </div>
       </div>
     );
-  },
-
-  componentDidMount: function() {
-    $("#team-1-edit").on("keydown", this.handleKeyDown);
-    $("#team-2-edit").on("keydown", this.handleKeyDown);
-  },
-
-  componentWillUnMount: function() {
-    $("#team-1-edit").off("keydown", this.handleKeyDown);
-    $("#team-2-edit").off("keydown", this.handleKeyDown);
-  },
-
-  handleKeyDown: function(e) {
-    if( e.keyCode == 13 ) {
-      this.changeTeam(e);
-    }
-  },
-
-  changeTeam: function(e) {
-    if (e.target.id == "team-1-edit") {
-      var team = "team-1";
-    } else {
-      var team = "team-2";
-    }
-      $("#" + team).text(e.target.value);
-      e.target.value = "";
   }
 });
 
@@ -70,13 +43,15 @@ var MapList = React.createClass({
 
   render: function() {
     return (
-      <div>
+      <div id="main">
+        <p className="vs-mapview">{this.props.teamOne} vs {this.props.teamTwo}</p>
         <p className="status">{this.statusChange()}</p>
         <div className="maplist">
           {this.maps.map(function(map) {
             return <Map map={map}/>;
           })}
         </div>
+        <a id="restart" href="">Restart</a>
       </div>
     );
   },
@@ -152,12 +127,6 @@ var MapList = React.createClass({
 
   statusChange: function() {
     if (this.state.turn === 7) {
-      // var pickedMapElements = $(".picked");
-      // var pickedMaps = [];
-      // pickedMapElements.each(function(idx) {
-      //   var pickedMap = $(pickedMapElements[idx]).children(".map-name")[0].innerText;
-      //   pickedMaps.push(pickedMap);
-      // });
       if (this.props.mapType === "bo3") {
         var firstMap = $(".first.picked")[0].children[0].innerText;
         var secondMap = $(".second.picked")[0].children[0].innerText;
@@ -215,9 +184,18 @@ var MapSelect = React.createClass({
     );
   },
 
+  getTeam: function(num) {
+    var teamEditElement = $("#team-" + num + "-edit");
+    if (teamEditElement.val().trim() === "") {
+      return "Team " + num;
+    } else {
+      return teamEditElement.val();
+    }
+  },
+
   submitType: function() {
     var mapType = $("select").val();
-    React.render(<App mapType={mapType} teamOne={$("#team-1").text()} teamTwo={$("#team-2").text()}/>, document.getElementById("app"));
+    React.render(<App mapType={mapType} teamOne={this.getTeam(1)} teamTwo={this.getTeam(2)}/>, document.getElementById("app"));
   }
 });
 
